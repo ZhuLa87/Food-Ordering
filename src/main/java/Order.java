@@ -8,14 +8,14 @@ public class Order {
     private Date date;
     private String status;  // "Pending", "Preparing", "Ready", "Delivered"
     private int totalAmount;
-    private List<MenuItem> items;
+    private List<MenuItem> OrderingItem;
 
     public Order() {
         this.id = nextId++;
         this.date = new Date();
         this.status = "Pending";
         this.totalAmount = 0;
-        items = new ArrayList<>();
+        OrderingItem = new ArrayList<>();
     }
 
     public long getId() {
@@ -34,8 +34,8 @@ public class Order {
         return totalAmount;
     }
 
-    public List<MenuItem> getItems() {
-        return items;
+    public List<MenuItem> getOrderingItem() {
+        return OrderingItem;
     }
 
     public void addOrderingItem(MenuItem menuItem, int quantity) {
@@ -48,17 +48,21 @@ public class Order {
             throw new IllegalArgumentException("Invalid quantity");
         }
         menuItem.setQuantity(quantity);
-        items.add(menuItem);
+        OrderingItem.add(menuItem);
         calculateTotalAmount();
     }
 
     public void removeOrderingItem(int orderItemId) {
-        if (orderItemId < 0 || orderItemId >= items.size()) {
+        if (orderItemId < 0 || orderItemId >= OrderingItem.size()) {
             // check if the orderItemId is valid
             throw new IllegalArgumentException("Invalid order item ID");
         }
-        items.remove(orderItemId);
+        OrderingItem.remove(orderItemId);
         calculateTotalAmount();
+    }
+
+    public List<MenuItem> getOrderingItems() {
+        return OrderingItem;
     }
 
     public void updateStatus(String newStatus) {
@@ -67,7 +71,7 @@ public class Order {
 
     private void calculateTotalAmount() {
         totalAmount = 0;
-        for (MenuItem item : items) {
+        for (MenuItem item : OrderingItem) {
             totalAmount += item.getSubTotal();
         }
     }
@@ -78,7 +82,7 @@ public class Order {
         System.out.println("Status: " + status);
         System.out.println("Total Amount: " + totalAmount);
         System.out.println("Items:");
-        for (MenuItem item : items) {
+        for (MenuItem item : OrderingItem) {
             System.out.println("  " + item.getName() + " - $" + item.getPrice() + " x " + item.getQuantity() + " = $" + item.getSubTotal());
         }
         System.out.println("##################################################");
